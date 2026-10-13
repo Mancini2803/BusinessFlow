@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block titulo %}Relatórios{% endblock %}
+
+{% block cabecalho %}
+    <h1>Relatórios</h1>
+    <p>Entenda o desempenho do seu negócio ao longo do tempo.</p>
+{% endblock %}
+
+{% block conteudo %}
+
+<!-- FILTRO DE PERÍODO -->
+<section class="filtros">
+
+    <div class="filtro">
+        <label for="periodo">Período</label>
+        <select id="periodo">
+            <option value="mes">Este mês</option>
+            <option value="30d">Últimos 30 dias</option>
+            <option value="3m">Últimos 3 meses</option>
+            <option value="6m">Últimos 6 meses</option>
+            <option value="ano">Este ano</option>
+            <option value="tudo">Todo o período</option>
+            <option value="personalizado">Personalizado</option>
+        </select>
+    </div>
+
+    <div class="filtro filtro-datas" id="filtroDatas" hidden>
+        <label for="dataDe">De</label>
+        <input type="date" id="dataDe">
+        <label for="dataAte">até</label>
+        <input type="date" id="dataAte">
+    </div>
+
+    <p class="filtro-info" id="infoPeriodo"></p>
+
+</section>
+
+<p class="aviso" id="avisoSemData" hidden></p>
+
+
+<!-- INDICADORES -->
+<section class="cards cards-4">
+
+    <div class="card" id="kpiFaturamento">
+        <p>Faturamento</p>
+        <h2>—</h2>
+        <span class="delta"></span>
+        <small></small>
+    </div>
+
+    <div class="card" id="kpiVendas">
+        <p>Vendas</p>
+        <h2>—</h2>
+        <span class="delta"></span>
+        <small></small>
+    </div>
+
+    <div class="card" id="kpiTicket">
+        <p>Ticket médio</p>
+        <h2>—</h2>
+        <span class="delta"></span>
+        <small></small>
+    </div>
+
+    <div class="card" id="kpiUnidades">
+        <p>Unidades vendidas</p>
+        <h2>—</h2>
+        <span class="delta"></span>
+        <small></small>
+    </div>
+
+</section>
+
+
+<!-- EVOLUÇÃO DO FATURAMENTO -->
+<section class="panel espaco">
+
+    <div class="panel-header">
+        <div>
+            <h3>Evolução do faturamento</h3>
+            <p id="subtituloEvolucao">Faturamento no período</p>
+        </div>
+    </div>
+
+    <div class="grafico-caixa">
+        <canvas id="graficoEvolucao" role="img" aria-label="Gráfico de linha com a evolução do faturamento no período"></canvas>
+        <p class="grafico-vazio" id="vazioEvolucao" hidden>Nenhuma venda neste período.</p>
+    </div>
+
+</section>
+
+
+<!-- PRODUTOS E CLIENTES -->
+<section class="relatorios-grid espaco">
+
+    <div class="panel">
+
+        <div class="panel-header">
+            <div>
+                <h3>Faturamento por produto</h3>
+                <p id="subtituloProdutos">Produtos que mais faturaram</p>
+            </div>
+        </div>
+
+        <div class="grafico-caixa grafico-pequeno">
+            <canvas id="graficoProdutos" role="img" aria-label="Gráfico de barras com o faturamento dos produtos que mais faturaram"></canvas>
+            <p class="grafico-vazio" id="vazioProdutos" hidden>Nenhuma venda neste período.</p>
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="panel-header">
+            <div>
+                <h3>Melhores clientes</h3>
+                <p id="subtituloClientes">Quem mais comprou no período</p>
+            </div>
+        </div>
+
+        <div class="tabela-wrapper">
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th class="num">Compras</th>
+                        <th class="num">Total</th>
+                        <th class="num">Parte</th>
+                    </tr>
+                </thead>
+                <tbody id="listaTopClientes"></tbody>
+            </table>
+        </div>
+
+        <p class="nota" id="notaClientes"></p>
+
+    </div>
+
+</section>
+
+
+<!-- COMPARAÇÃO MENSAL -->
+<section class="panel espaco">
+
+    <div class="panel-header">
+        <div>
+            <h3>Comparação entre meses</h3>
+            <p>Últimos 12 meses, independente do período escolhido acima.</p>
+        </div>
+    </div>
+
+    <div class="tabela-wrapper">
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Mês</th>
+                    <th class="num">Faturamento</th>
+                    <th class="num">Vendas</th>
+                    <th class="num">Variação</th>
+                </tr>
+            </thead>
+            <tbody id="listaMeses"></tbody>
+        </table>
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/relatorios.js') }}"></script>
+{% endblock %}
