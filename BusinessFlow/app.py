@@ -1,10 +1,15 @@
 from flask import Flask, jsonify, request, render_template
+import os
 import re
 import sqlite3
 
+import insights
+
+insights.carregar_env()   # lê o arquivo .env (chave do Gemini)
+
 app = Flask(__name__)
 
-BANCO = "database.db"
+BANCO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "database.db")
 
 
 def conectar_banco():
@@ -51,6 +56,16 @@ def criar_banco():
         conexao.execute("ALTER TABLE vendas ADD COLUMN data TEXT")
     if "cliente_id" not in colunas:
         conexao.execute("ALTER TABLE vendas ADD COLUMN cliente_id INTEGER")
+
+    conexao.execute("""
+        CREATE TABLE IF NOT EXISTS analises_ia (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            criado_em TEXT NOT NULL,
+            modelo TEXT,
+            hash_fatos TEXT,
+            insights_json TEXT NOT NULL
+        )
+    """)
 
     conexao.commit()
     conexao.close()
@@ -378,6 +393,40 @@ def excluir_cliente(cliente_id):
         return jsonify({"erro": "Cliente não encontrado."}), 404
 
     return jsonify({"mensagem": "Cliente excluído com sucesso!"})
+
+
+# ================= INSIGHTS (IA) =================
+
+@app.route("/api/insights", methods=["GET"])
+def buscar_insights():
+    """Insights por regras (sempre) + última análise do Gemini (se existir)."""
+    conexao = conectar_banco()
+    fatos = insights.calcular_fatos(conexao)
+    ultima = insights.ultima_analise(conexao)
+    conexao.close()
+
+    return jsonify({
+        "ia_configurada": bool(insights.obter_chave()),
+        "modelo": insights.obter_modelo(),
+        "regras": insights.insights_por_regras(fatos),
+        "ia": ultima,
+        "ia_desatualizada": bool(ultima) and ultima["hash_fatos"] != insights.hash_fatos(fatos),
+    })
+
+
+@app.route("/api/insights/gerar", methods=["POST"])
+def gerar_insights_ia():
+    conexao = conectar_banco()
+
+    try:
+        resultado = insights.gerar_analise(conexao)
+    except insights.IAErro as erro:
+        return jsonify({"erro": erro.mensagem, "codigo": erro.codigo}), \
+            insights.STATUS_HTTP.get(erro.codigo, 500)
+    finally:
+        conexao.close()
+
+    return jsonify(resultado)
 
 
 if __name__ == "__main__":

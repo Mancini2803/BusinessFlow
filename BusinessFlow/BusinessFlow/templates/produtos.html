@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block titulo %}Produtos{% endblock %}
+
+{% block cabecalho %}
+    <h1>Produtos</h1>
+    <p>Cadastre e gerencie os produtos do seu negócio.</p>
+{% endblock %}
+
+{% block botoes %}
+    <button class="btn-secundario" id="novoProduto">+ Novo produto</button>
+{% endblock %}
+
+{% block conteudo %}
+<section class="panel">
+
+    <div class="panel-header">
+        <div>
+            <h3>Catálogo</h3>
+            <p id="resumoProdutos">Carregando...</p>
+        </div>
+
+        <input type="search" id="buscaProduto" class="busca" placeholder="Buscar produto...">
+    </div>
+
+    <div class="tabela-wrapper">
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th class="num">Preço</th>
+                    <th class="num">Estoque</th>
+                    <th class="num">Vendidos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="listaProdutosTabela"></tbody>
+        </table>
+    </div>
+
+</section>
+
+
+<!-- MODAL DE PRODUTO (cadastrar / editar) -->
+<div class="modal" id="modalProduto">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2 id="tituloModalProduto">Novo produto</h2>
+            <button type="button" class="fechar-modal" id="fecharModalProduto" aria-label="Fechar">&times;</button>
+        </div>
+
+        <form id="formProduto">
+
+            <div class="form-group">
+                <label for="nomeProduto">Nome</label>
+                <input type="text" id="nomeProduto" placeholder="Ex.: Tênis Nike" required>
+            </div>
+
+            <div class="form-group">
+                <label for="precoProduto">Preço (R$)</label>
+                <input type="number" id="precoProduto" min="0.01" step="0.01" placeholder="0,00" required>
+            </div>
+
+            <div class="form-group">
+                <label for="estoqueProduto">Estoque (unidades)</label>
+                <input type="number" id="estoqueProduto" min="0" step="1" placeholder="0" required>
+            </div>
+
+            <button type="submit" class="btn-confirmar">Salvar produto</button>
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/produtos.js') }}"></script>
+{% endblock %}

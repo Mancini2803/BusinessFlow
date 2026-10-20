@@ -40,6 +40,8 @@ function calcularIndicadores(vendas) {
     let faturamento = 0;
     const porProduto = {};
     const porMes = {};
+    const ateHoje = {};                       // dia 1 até o dia de hoje, por mês
+    const diaHoje = new Date().getDate();
 
     vendas.forEach((venda) => {
 
@@ -65,6 +67,12 @@ function calcularIndicadores(vendas) {
             }
             porMes[chave].faturamento += total;
             porMes[chave].vendas += 1;
+
+            if (Number(venda.data.slice(8, 10)) <= diaHoje) {
+                if (!ateHoje[chave]) ateHoje[chave] = { faturamento: 0, vendas: 0 };
+                ateHoje[chave].faturamento += total;
+                ateHoje[chave].vendas += 1;
+            }
         }
     });
 
@@ -80,7 +88,8 @@ function calcularIndicadores(vendas) {
     const mesAtual = ultimosMeses(2)[1].chave;
     const mesAnterior = ultimosMeses(2)[0].chave;
     const atual = porMes[mesAtual] || { faturamento: 0, vendas: 0 };
-    const anterior = porMes[mesAnterior] || { faturamento: 0, vendas: 0 };
+    // mês atual ainda não terminou: compara com o mesmo trecho do mês anterior
+    const anterior = ateHoje[mesAnterior] || { faturamento: 0, vendas: 0 };
 
     return {
         faturamento,

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block titulo %}Dashboard{% endblock %}
+
+{% block cabecalho %}
+    <h1>Olá, Matheus 👋</h1>
+    <p>Aqui está o resumo do seu negócio.</p>
+{% endblock %}
+
+{% block conteudo %}
+<!-- CARDS -->
+<section class="cards">
+
+    <div class="card">
+        <p>Faturamento</p>
+        <h2>R$ 0,00</h2>
+        <span class="positive">—</span>
+        <small>vs. mês anterior</small>
+    </div>
+
+    <div class="card">
+        <p>Vendas</p>
+        <h2>0</h2>
+        <span class="positive">—</span>
+        <small>vs. mês anterior</small>
+    </div>
+
+    <div class="card">
+        <p>Clientes</p>
+        <h2>—</h2>
+        <span class="positive">—</span>
+        <small>vs. mês anterior</small>
+    </div>
+
+</section>
+
+
+<!-- ÁREA DOS GRÁFICOS -->
+<section class="dashboard-grid">
+
+    <div class="panel chart-panel">
+
+        <div class="panel-header">
+            <div>
+                <h3>Vendas</h3>
+                <p>Desempenho dos últimos meses</p>
+            </div>
+
+            <select>
+                <option>Últimos 6 meses</option>
+                <option>Últimos 12 meses</option>
+            </select>
+        </div>
+
+        <div class="chart">
+            <div class="bars">
+                <div class="bar-container"><div class="bar" style="height: 2%;"></div><span>Mar</span></div>
+                <div class="bar-container"><div class="bar" style="height: 2%;"></div><span>Abr</span></div>
+                <div class="bar-container"><div class="bar" style="height: 2%;"></div><span>Mai</span></div>
+                <div class="bar-container"><div class="bar" style="height: 2%;"></div><span>Jun</span></div>
+                <div class="bar-container"><div class="bar" style="height: 2%;"></div><span>Jul</span></div>
+                <div class="bar-container"><div class="bar" style="height: 2%;"></div><span>Ago</span></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- PRODUTOS -->
+    <div class="panel">
+
+        <div class="panel-header">
+            <div>
+                <h3>Produtos mais vendidos</h3>
+                <p>Ranking de vendas</p>
+            </div>
+        </div>
+
+        <!-- Preenchido pelo script.js a partir de /api/vendas -->
+        <div class="products"></div>
+
+    </div>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

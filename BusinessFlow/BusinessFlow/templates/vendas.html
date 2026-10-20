@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block titulo %}Vendas{% endblock %}
+
+{% block cabecalho %}
+    <h1>Vendas</h1>
+    <p>Histórico de todas as vendas cadastradas.</p>
+{% endblock %}
+
+{% block conteudo %}
+<section class="panel">
+
+    <div class="panel-header">
+        <div>
+            <h3>Histórico</h3>
+            <p id="resumoVendas">Carregando...</p>
+        </div>
+
+        <input type="search" id="busca" class="busca" placeholder="Buscar por produto ou cliente...">
+    </div>
+
+    <div class="tabela-wrapper">
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Produto</th>
+                    <th>Cliente</th>
+                    <th class="num">Valor unit.</th>
+                    <th class="num">Qtd.</th>
+                    <th class="num">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="listaVendas"></tbody>
+        </table>
+    </div>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/vendas.js') }}"></script>
+{% endblock %}

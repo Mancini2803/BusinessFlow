@@ -15,14 +15,14 @@
         <p>Faturamento</p>
         <h2>R$ 0,00</h2>
         <span class="positive">—</span>
-        <small>vs. mês anterior</small>
+        <small>vs. mesmo período do mês anterior</small>
     </div>
 
     <div class="card">
         <p>Vendas</p>
         <h2>0</h2>
         <span class="positive">—</span>
-        <small>vs. mês anterior</small>
+        <small>vs. mesmo período do mês anterior</small>
     </div>
 
     <div class="card">
@@ -82,8 +82,27 @@
     </div>
 
 </section>
+
+<!-- ANÁLISE INTELIGENTE -->
+<section class="panel espaco" id="painelIA">
+
+    <div class="panel-header">
+        <div>
+            <h3>Análise inteligente</h3>
+            <p id="iaSubtitulo">Resumo automático do seu negócio</p>
+        </div>
+
+        <button type="button" class="btn-ia" id="btnGerarIA" hidden>✨ Gerar análise com IA</button>
+    </div>
+
+    <ul class="insights" id="listaInsights" aria-live="polite"></ul>
+
+    <p class="nota" id="iaNota"></p>
+
+</section>
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/insights.js') }}"></script>
 {% endblock %}

@@ -263,6 +263,15 @@ function comparacaoMensal() {
     const hoje = new Date();
     const linhas = [];
 
+    // Mês atual é parcial: compara só com o mesmo trecho (dia 1 até hoje) do mês anterior
+    const mesmoTrechoAnterior = {};
+    vendas.forEach((v) => {
+        if (Number(v.data.slice(8, 10)) <= hoje.getDate()) {
+            const chave = v.data.slice(0, 7);
+            mesmoTrechoAnterior[chave] = (mesmoTrechoAnterior[chave] || 0) + v.valor * v.quantidade;
+        }
+    });
+
     for (let i = 0; i < 12; i++) {
         const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
         const chave = `${d.getFullYear()}-${doisDigitos(d.getMonth() + 1)}`;
@@ -278,7 +287,9 @@ function comparacaoMensal() {
             parcial: i === 0,
             faturamento: atual.faturamento,
             vendas: atual.vendas,
-            variacao: antes ? variacao(atual.faturamento, antes.faturamento) : null
+            variacao: antes
+                ? variacao(atual.faturamento, i === 0 ? (mesmoTrechoAnterior[chaveAnterior] || 0) : antes.faturamento)
+                : null
         });
     }
 
